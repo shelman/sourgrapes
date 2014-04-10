@@ -71,12 +71,20 @@ func (self *Movie) GetMoviesWithSameKeywords() error {
 			err)
 	}
 
+	simMap := map[string]int{}
+
 	fmt.Println(fmt.Sprintf("Main movie: %v", self.Title))
 	for _, keyword := range keywords {
 		fmt.Println(fmt.Sprintf("   Keyword: %v", keyword.Word))
 		for _, mv := range keyword.Movies {
 			fmt.Println(fmt.Sprintf("       %v", mv))
+			simMap[mv]++
 		}
+	}
+
+	fmt.Println("Similarity scores")
+	for mv, sim := range simMap {
+		fmt.Println(fmt.Sprintf("%v: %v", mv, sim))
 	}
 
 	return nil
