@@ -11,6 +11,11 @@ var sourgrapes = angular.module(
 sourgrapes.controller('ChooseKeywordCtrl', function($window, $scope) {
     
     $scope.keywords = $window.keywords;
+    $scope.previous = $window.previous;
+
+    $scope.keywordUrl = function (keyword) {
+        return '/keyword/' + keyword.word + '?previous=' + $scope.previous.join(',');
+    }
 
 })
 

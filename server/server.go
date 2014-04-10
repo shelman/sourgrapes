@@ -4,9 +4,13 @@ import (
 	"fmt"
 	"github.com/go-martini/martini"
 	"html/template"
+	"labix.org/v2/mgo"
+	"math/rand"
 	"net/http"
 	"path/filepath"
 	"shelman/sourgrapes/model"
+	"shelman/sourgrapes/util"
+	"strings"
 )
 
 var (
@@ -33,28 +37,87 @@ func indexHandler(res http.ResponseWriter, req *http.Request) {
 		res.Write([]byte(fmt.Sprintf("error: %v", err)))
 	}
 
-	tmpl, err := template.ParseFiles(filepath.Join(frontEndRoot, "main.html"))
+	tmpl, err := template.ParseFiles(filepath.Join(frontEndRoot, "choose_keyword.html"))
 	if err != nil {
 		res.Write([]byte(fmt.Sprintf("error: %v", err)))
 		return
 	}
-	tmpl.Execute(res, randomKeywords)
+	tmpl.Execute(res, &keywordsInfo{Keywords: randomKeywords, Previous: []string{}})
+}
+
+type keywordsInfo struct {
+	Keywords []model.Keyword `json:"keywords"`
+	Previous []string        `json:"previous"`
 }
 
 func keywordHandler(params martini.Params, res http.ResponseWriter, req *http.Request) {
 	word := params["word"]
 	keyword, err := model.FindKeyword(word)
 	if err != nil {
+		if err == mgo.ErrNotFound {
+			res.Write([]byte(fmt.Sprintf("stop entering keywords into the url manually")))
+			return
+		}
 		res.Write([]byte(fmt.Sprintf("error: %v", err)))
 		return
 	}
 
-	tmpl, err := template.ParseFiles(filepath.Join(frontEndRoot, "keyword.html"))
+	// the previous words
+	prev := req.FormValue("previous")
+	allPrev := strings.Split(prev, ",")
+	if prev == "" {
+		allPrev = []string{}
+	}
+
+	// find all movies matching the keyword
+	movies, err := model.FindMovies(keyword.Movies)
 	if err != nil {
 		res.Write([]byte(fmt.Sprintf("error: %v", err)))
 		return
 	}
-	tmpl.Execute(res, keyword)
+
+	// filter out to movies also matching the previous keywords
+	allMatches := append(allPrev, word)
+	moviesMatching := []model.Movie{}
+	for _, movie := range movies {
+		matches := true
+		for _, w := range allMatches {
+			if !util.SliceHasString(movie.Keywords, w) {
+				matches = false
+				break
+			}
+		}
+		if matches {
+			moviesMatching = append(moviesMatching, movie)
+		}
+	}
+
+	// we narrowed it down!
+	if len(moviesMatching) == 1 {
+		res.Write([]byte(fmt.Sprintf("looks like you're watching %v", moviesMatching[0].Title)))
+		return
+	}
+
+	// we have to narrow it down farther.  get one keyword from each movie matching
+	// all of them so far
+	newKeywords := []model.Keyword{}
+	for _, movie := range moviesMatching {
+		n := rand.Int() % len(movie.Keywords)
+		kw, err := model.FindKeyword(movie.Keywords[n])
+		if err != nil {
+			res.Write([]byte(fmt.Sprintf("error: %v", err)))
+			return
+		}
+		kw.Movies = []string{}
+		newKeywords = append(newKeywords, *kw)
+	}
+
+	tmpl, err := template.ParseFiles(filepath.Join(frontEndRoot, "choose_keyword.html"))
+	if err != nil {
+		res.Write([]byte(fmt.Sprintf("error: %v", err)))
+		return
+	}
+	tmpl.Execute(res, &keywordsInfo{Keywords: newKeywords, Previous: allMatches})
 }
 
 func movieHandler(params martini.Params) string {
