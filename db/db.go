@@ -6,9 +6,10 @@ import (
 )
 
 var (
-	url         = "mongodb://localhost:27017"
-	dbName      = "sourgrapes"
-	dialTimeout = time.Second * 5
+	url            = "mongodb://localhost:27017"
+	dbName         = "sourgrapes"
+	dialTimeout    = time.Second * 5
+	sessionFactory *SessionFactory
 )
 
 type SessionFactory struct {
@@ -24,6 +25,13 @@ func NewSessionFactory() *SessionFactory {
 		DBName:      dbName,
 		DialTimeout: dialTimeout,
 	}
+}
+
+func GetFactory() *SessionFactory {
+	if sessionFactory == nil {
+		sessionFactory = NewSessionFactory()
+	}
+	return sessionFactory
 }
 
 func (self *SessionFactory) GetSession() (*mgo.Session, *mgo.Database, error) {

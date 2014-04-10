@@ -11,12 +11,14 @@ const (
 )
 
 type Movie struct {
-	Id    bson.ObjectId `bson:"_id,omitempty"`
-	Title string        `bson:"t"`
+	Id       bson.ObjectId `bson:"_id,omitempty"`
+	Title    string        `bson:"t"`
+	Year     string        `bson:"y"`
+	Keywords []string      `bson:"kw"`
 }
 
 func (self *Movie) Insert() error {
-	sess, d, err := db.NewSessionFactory().GetSession()
+	sess, d, err := db.GetFactory().GetSession()
 	if err != nil {
 		return fmt.Errorf("couldn't get session: %v", err)
 	}
