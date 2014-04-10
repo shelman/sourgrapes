@@ -18,7 +18,7 @@
 
     <div class="row" ng-controller="ChooseKeywordCtrl">
       <div class="col-lg-12">
-        <h1>What {{if .Previous}}else{{else}}best{{end}} describes what sort of movie you want to see right now?</h1>
+        <h1>{{.Header}}</h1>
 
         <ul>
           <a ng-repeat="keyword in keywords" ng-href="[[keywordUrl(keyword)]]">

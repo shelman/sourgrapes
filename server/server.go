@@ -42,12 +42,14 @@ func indexHandler(res http.ResponseWriter, req *http.Request) {
 		res.Write([]byte(fmt.Sprintf("error: %v", err)))
 		return
 	}
-	tmpl.Execute(res, &keywordsInfo{Keywords: randomKeywords, Previous: []string{}})
+	tmpl.Execute(res, &keywordsInfo{Keywords: randomKeywords, Previous: []string{},
+		Header: getHeader(true)})
 }
 
 type keywordsInfo struct {
 	Keywords []model.Keyword `json:"keywords"`
 	Previous []string        `json:"previous"`
+	Header   string          `json:"header"`
 }
 
 func keywordHandler(params martini.Params, res http.ResponseWriter, req *http.Request) {
@@ -117,7 +119,8 @@ func keywordHandler(params martini.Params, res http.ResponseWriter, req *http.Re
 		res.Write([]byte(fmt.Sprintf("error: %v", err)))
 		return
 	}
-	tmpl.Execute(res, &keywordsInfo{Keywords: newKeywords, Previous: allMatches})
+	tmpl.Execute(res, &keywordsInfo{Keywords: newKeywords, Previous: allMatches,
+		Header: getHeader(false)})
 }
 
 func movieHandler(params martini.Params) string {
