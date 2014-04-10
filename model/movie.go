@@ -11,10 +11,10 @@ const (
 )
 
 type Movie struct {
-	Id       bson.ObjectId `bson:"_id,omitempty"`
-	Title    string        `bson:"t"`
-	Year     string        `bson:"y"`
-	Keywords []string      `bson:"kw"`
+	Id       bson.ObjectId `bson:"_id,omitempty" json:"_id"`
+	Title    string        `bson:"t" json:"title"`
+	Year     string        `bson:"y" json:"year"`
+	Keywords []string      `bson:"kw" json:"keywords"`
 }
 
 func (self *Movie) Insert() error {

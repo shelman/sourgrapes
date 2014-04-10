@@ -12,9 +12,9 @@ const (
 )
 
 type Keyword struct {
-	Id     bson.ObjectId `bson:"_id,omitempty"`
-	Word   string        `bson:"kw"`
-	Movies []string      `bson:"mv"`
+	Id     bson.ObjectId `bson:"_id,omitempty" json:"_id"`
+	Word   string        `bson:"kw" json:"word"`
+	Movies []string      `bson:"mv" json:"movies"`
 }
 
 func GetRandomKeywords(howMany int) ([]Keyword, error) {

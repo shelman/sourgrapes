@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	tmplRoot = "/Users/sam/code/skunk/src/shelman/sourgrapes/frontend"
+	frontEndRoot = "/Users/sam/code/skunk/src/shelman/sourgrapes/frontend"
 )
 
 func Start() {
@@ -20,6 +20,8 @@ func Start() {
 	m.Get("/", indexHandler)
 	m.Get("/keyword/:word", keywordHandler)
 	m.Get("/movie/:title", movieHandler)
+
+	m.Use(martini.Static(filepath.Join(frontEndRoot, "js")))
 
 	m.Run()
 }
@@ -31,7 +33,7 @@ func indexHandler(res http.ResponseWriter, req *http.Request) {
 		res.Write([]byte(fmt.Sprintf("error: %v", err)))
 	}
 
-	tmpl, err := template.ParseFiles(filepath.Join(tmplRoot, "main.html"))
+	tmpl, err := template.ParseFiles(filepath.Join(frontEndRoot, "main.html"))
 	if err != nil {
 		res.Write([]byte(fmt.Sprintf("error: %v", err)))
 		return
@@ -47,7 +49,7 @@ func keywordHandler(params martini.Params, res http.ResponseWriter, req *http.Re
 		return
 	}
 
-	tmpl, err := template.ParseFiles(filepath.Join(tmplRoot, "keyword.html"))
+	tmpl, err := template.ParseFiles(filepath.Join(frontEndRoot, "keyword.html"))
 	if err != nil {
 		res.Write([]byte(fmt.Sprintf("error: %v", err)))
 		return
