@@ -1,0 +1,16 @@
+<html>
+
+  <head>
+  </head>
+
+  <body>
+    <h1>What matches {{.Word}}?</h1>
+
+    <ul>
+    {{range .Movies}}
+      <a href="/movie/{{.}}"><li>{{.}}</li></a>
+    {{end}}
+    </ul>
+  </body>
+
+</html>
