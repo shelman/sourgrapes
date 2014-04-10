@@ -16,6 +16,24 @@ type Keyword struct {
 	Movies []string      `bson:"mv"`
 }
 
+func FindKeywords(words []string) ([]Keyword, error) {
+	sess, d, err := db.GetFactory().GetSession()
+	if err != nil {
+		return nil, fmt.Errorf("couldn't get session: %v", err)
+	}
+	defer sess.Close()
+
+	keywords := []Keyword{}
+	err = d.C(KEYWORD_COLLECTION).Find(
+		bson.M{
+			"kw": bson.M{
+				"$in": words,
+			},
+		},
+	).All(&keywords)
+	return keywords, err
+}
+
 func (self *Keyword) Insert() error {
 	sess, d, err := db.GetFactory().GetSession()
 	if err != nil {
