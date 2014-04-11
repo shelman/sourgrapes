@@ -4,6 +4,35 @@ body {
 
 h1 {
     text-align: center;
+    color: #00748E;
+    margin-bottom: 50px;
+}
+
+h2 {
+    text-align: center;
+}
+
+#previous-choices {
+    width: 50%;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 40px;
+}
+
+#previous-choices li {
+    width: 100%;
+    text-align: center;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 3px;
+    color: white;
+    background-color: #666;
+}
+
+#previous-choices a {
+    color: white;
+    text-decoration: none;
 }
 
 #kw-choices {
@@ -31,6 +60,10 @@ h1 {
     opacity: .7;
 }
 
-#none-good {
+.none-good {
     background-color: #DA3B3A !important;
+}
+
+.none-good:hover {
+    opacity: .7;
 }

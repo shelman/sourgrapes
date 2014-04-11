@@ -17,9 +17,5 @@ sourgrapes.controller('ChooseKeywordCtrl', function($window, $scope) {
         return '/keyword/' + keyword.word + '?previous=' + $scope.previous.join(',');
     }
 
-    $scope.imageUrl = function(keyword) {
-        return 'https://www.google.com/search?q=' + keyword.word + '&tbm=isch';
-    }
-
 })
 

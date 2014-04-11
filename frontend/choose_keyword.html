@@ -13,22 +13,35 @@
     <script type="text/javascript">
       window.keywords = {{.Keywords}};
       window.previous = {{.Previous}};
-      console.log(window.keywords);
-      console.log(window.previous);
+      console.log(window.previous)
     </script>
 
     <div class="row" ng-controller="ChooseKeywordCtrl">
       <div class="col-lg-2">
       </div>
       <div class="col-lg-8">
-        <h1>{{.Header}}</h1>
+
+        <h1>Lets pick a movie to watch!</h1>
+
+        <h2 ng-show="previous.length != 0">This is what you've got so far...</h2>
+  
+        <ul id="previous-choices" class="list-unstyled">
+          <li ng-repeat="prev in previous">
+            [[prev]]
+          </li>
+          <a ng-show="previous.length != 0" href="/">
+            <li class="none-good">Let's start over</li>
+          </a>
+        </ul>
+
+        <h2>{{.Header}}</h2>
 
         <ul id="kw-choices" class="list-unstyled">
           <a ng-repeat="keyword in keywords" ng-href="[[keywordUrl(keyword)]]">
             <li>[[keyword.word]]</li>
           </a>
           <a href=".">
-            <li id="none-good">Nah, let's try something else</li>
+            <li class="none-good">Nah, let's try something else</li>
           </a>
         </ul>
       </div>
