@@ -6,8 +6,20 @@
   </head>
 
   <body>
-  <h1>Congratulations, tonight you're gonna watch...</h1>
-  <h2>"{{.Title}}" ({{.Year}})</h2>
+
+    <ul id="nav-opts" class="list-unstyled">
+      <a href="/search/movie/">
+        <li>Search for a movie</li>
+      </a>
+      <li>or</li>
+      <a href="/">
+        <li>Find something to watch</li>
+      </a>
+    </ul>
+
+    <h1>Congratulations, tonight you're gonna watch...</h1>
+    <h2>"{{.Title}}" ({{.Year}})</h2>
+
   </body>
 
 </html>
