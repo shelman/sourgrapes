@@ -44,7 +44,8 @@ func (self *KeywordScraper) Scrape() error {
 	for idx, line := range byLine[1:] {
 		if len(line) == 0 || !strings.Contains(alphaNumeric, line[:1]) ||
 			strings.Contains(line, "(VG)") || strings.Contains(line, "(TV)") ||
-			strings.Contains(line, "(V)") {
+			strings.Contains(line, "(V)") || strings.Contains(line, "/I)") ||
+			strings.Contains(line, "{{SUSPENDED}}") {
 			continue
 		}
 
