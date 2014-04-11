@@ -14,7 +14,7 @@ sourgrapes.controller('ChooseKeywordCtrl', function($window, $scope) {
     $scope.previous = $window.previous;
 
     $scope.keywordUrl = function (keyword) {
-        return '/keyword/' + keyword.word + '?previous=' + $scope.previous.join(',');
+        return '/choose/' + keyword.word + '?previous=' + $scope.previous.join(',');
     }
 
 })

@@ -41,7 +41,7 @@
           <a ng-repeat="keyword in keywords" ng-href="[[keywordUrl(keyword)]]">
             <li>[[keyword.word]]</li>
           </a>
-          <a href=".">
+          <a ng-show="previous.length == 0" href=".">
             <li class="none-good">Nah, let's try something else</li>
           </a>
         </ul>

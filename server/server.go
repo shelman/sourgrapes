@@ -22,7 +22,7 @@ func Start() {
 	m := martini.Classic()
 
 	m.Get("/", indexHandler)
-	m.Get("/keyword/:word", keywordHandler)
+	m.Get("/choose/:word", chooseHandler)
 	m.Get("/movie/:title", movieHandler)
 
 	m.Use(martini.Static(filepath.Join(frontEndRoot, "js")))
@@ -43,17 +43,17 @@ func indexHandler(res http.ResponseWriter, req *http.Request) {
 		res.Write([]byte(fmt.Sprintf("error: %v", err)))
 		return
 	}
-	tmpl.Execute(res, &keywordsInfo{Keywords: randomKeywords, Previous: []string{},
+	tmpl.Execute(res, &chooseInfo{Keywords: randomKeywords, Previous: []string{},
 		Header: getHeader(true)})
 }
 
-type keywordsInfo struct {
+type chooseInfo struct {
 	Keywords []model.Keyword `json:"keywords"`
 	Previous []string        `json:"previous"`
 	Header   string          `json:"header"`
 }
 
-func keywordHandler(params martini.Params, res http.ResponseWriter, req *http.Request) {
+func chooseHandler(params martini.Params, res http.ResponseWriter, req *http.Request) {
 	word := params["word"]
 	keyword, err := model.FindKeyword(word)
 	if err != nil {
@@ -125,7 +125,7 @@ func keywordHandler(params martini.Params, res http.ResponseWriter, req *http.Re
 		res.Write([]byte(fmt.Sprintf("error: %v", err)))
 		return
 	}
-	tmpl.Execute(res, &keywordsInfo{Keywords: newKeywords, Previous: allMatches,
+	tmpl.Execute(res, &chooseInfo{Keywords: newKeywords, Previous: allMatches,
 		Header: getHeader(false)})
 }
 
