@@ -1,0 +1,24 @@
+#keywords {
+    width: 50%;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#keywords li {
+    width: 100%;
+    text-align: center;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 3px;
+    background-color: #00748E;
+}
+
+#keywords a {
+    color: white;
+    text-decoration: none;
+}
+
+#keywords li:hover {
+    opacity: .7;
+}

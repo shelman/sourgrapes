@@ -129,11 +129,22 @@ func chooseHandler(params martini.Params, res http.ResponseWriter, req *http.Req
 		Header: getHeader(false)})
 }
 
-func movieHandler(params martini.Params) string {
+func movieHandler(params martini.Params, res http.ResponseWriter, req *http.Request) {
 	title := params["title"]
 	movie, err := model.FindMovie(title)
 	if err != nil {
-		return fmt.Sprintf("error: %v", err)
+		if err == mgo.ErrNotFound {
+			res.Write([]byte(fmt.Sprintf("stop entering keywords into the url manually")))
+			return
+		}
+		res.Write([]byte(fmt.Sprintf("error: %v", err)))
+		return
 	}
-	return movie.Title
+
+	tmpl, err := template.ParseFiles(filepath.Join(frontEndRoot, "movie.html"))
+	if err != nil {
+		res.Write([]byte(fmt.Sprintf("error: %v", err)))
+		return
+	}
+	tmpl.Execute(res, movie)
 }
