@@ -24,6 +24,7 @@ func Start() {
 	m.Get("/", indexHandler)
 	m.Get("/choose/:word", chooseHandler)
 	m.Get("/movie/:title", movieHandler)
+	m.Get("/keyword/:word", keywordHandler)
 
 	m.Use(martini.Static(filepath.Join(frontEndRoot, "js")))
 	m.Use(martini.Static(filepath.Join(frontEndRoot, "css")))
@@ -130,11 +131,11 @@ func chooseHandler(params martini.Params, res http.ResponseWriter, req *http.Req
 }
 
 func movieHandler(params martini.Params, res http.ResponseWriter, req *http.Request) {
-	title := params["title"]
+	title := strings.ToLower(params["title"])
 	movie, err := model.FindMovie(title)
 	if err != nil {
 		if err == mgo.ErrNotFound {
-			res.Write([]byte(fmt.Sprintf("stop entering keywords into the url manually")))
+			res.Write([]byte(fmt.Sprintf("stop entering movie titles into the url manually")))
 			return
 		}
 		res.Write([]byte(fmt.Sprintf("error: %v", err)))
@@ -147,4 +148,24 @@ func movieHandler(params martini.Params, res http.ResponseWriter, req *http.Requ
 		return
 	}
 	tmpl.Execute(res, movie)
+}
+
+func keywordHandler(params martini.Params, res http.ResponseWriter, req *http.Request) {
+	word := params["word"]
+	keyword, err := model.FindKeyword(word)
+	if err != nil {
+		if err == mgo.ErrNotFound {
+			res.Write([]byte(fmt.Sprintf("stop entering keywords into the url manually")))
+			return
+		}
+		res.Write([]byte(fmt.Sprintf("error: %v", err)))
+		return
+	}
+
+	tmpl, err := template.ParseFiles(filepath.Join(frontEndRoot, "keyword.html"))
+	if err != nil {
+		res.Write([]byte(fmt.Sprintf("error: %v", err)))
+		return
+	}
+	tmpl.Execute(res, keyword)
 }

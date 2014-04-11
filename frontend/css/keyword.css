@@ -1,0 +1,24 @@
+#movies {
+    width: 50%;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#movies li {
+    width: 100%;
+    text-align: center;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 3px;
+    background-color: #00748E;
+}
+
+#movies a {
+    color: white;
+    text-decoration: none;
+}
+
+#movies li:hover {
+    opacity: .7;
+}

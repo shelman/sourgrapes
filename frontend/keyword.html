@@ -1,0 +1,22 @@
+<html>
+
+  <head>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/common.css" rel="stylesheet">
+    <link href="/keyword.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <h1>{{.Word}}</h2>
+
+    <h2>Movies</h2>
+    <ul id="movies" class="list-unstyled">
+      {{range .Movies}}
+        <a href="/movie/{{.}}">
+          <li>{{.}}</li>
+        </a>
+      {{end}}
+    </ul>
+  </body>
+
+</html>
