@@ -26,6 +26,7 @@ func Start() {
 	m.Get("/movie/:title", movieHandler)
 
 	m.Use(martini.Static(filepath.Join(frontEndRoot, "js")))
+	m.Use(martini.Static(filepath.Join(frontEndRoot, "css")))
 
 	m.Run()
 }

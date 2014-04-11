@@ -1,0 +1,36 @@
+body {
+    background-color: #E3DFBB;
+}
+
+h1 {
+    text-align: center;
+}
+
+#kw-choices {
+    width: 50%;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#kw-choices li {
+    width: 100%;
+    text-align: center;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 3px;
+    background-color: #00748E;
+}
+
+#kw-choices a {
+    color: white;
+    text-decoration: none;
+}
+
+#kw-choices li:hover {
+    opacity: .7;
+}
+
+#none-good {
+    background-color: #DA3B3A !important;
+}
