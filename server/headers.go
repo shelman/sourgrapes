@@ -10,6 +10,7 @@ var (
 		"Whatcha in the mood to see?",
 		"Pick your poison...",
 		"Which of these best describes what you want to watch?",
+		"Which of these appeals to you?",
 	}
 	subsequentHeaders = []string{
 		"Let's get more specific...",

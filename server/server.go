@@ -121,7 +121,11 @@ func chooseHandler(params martini.Params, res http.ResponseWriter, req *http.Req
 			return
 		}
 		kw.Movies = []string{}
-		newKeywords = append(newKeywords, *kw)
+		// don't repeat a word.  this could possibly, in a tiny circumstance,
+		// cause newKeywords to be empty
+		if !util.SliceHasString(allMatches, kw.Word) {
+			newKeywords = append(newKeywords, *kw)
+		}
 	}
 
 	tmpl, err := template.ParseFiles(filepath.Join(frontEndRoot, "choose_keyword.html"))
