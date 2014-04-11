@@ -27,6 +27,25 @@ func (self *Movie) Insert() error {
 	return d.C(MOVIE_COLLECTION).Insert(self)
 }
 
+func FindMoviesWithPrefix(prefix string) ([]Movie, error) {
+	sess, d, err := db.GetFactory().GetSession()
+	if err != nil {
+		return nil, fmt.Errorf("couldn't get session: %v", err)
+	}
+	defer sess.Close()
+
+	movies := []Movie{}
+	err = d.C(MOVIE_COLLECTION).Find(
+		bson.M{
+			"t": bson.RegEx{
+				Pattern: "^" + prefix,
+				Options: "",
+			},
+		},
+	).Limit(20).All(&movies)
+	return movies, err
+}
+
 func FindMovie(title string) (*Movie, error) {
 	sess, d, err := db.GetFactory().GetSession()
 	if err != nil {

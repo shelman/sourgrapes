@@ -1,5 +1,5 @@
-var sourgrapes = angular.module(
-    'sourgrapes', 
+var chooseKeyword = angular.module(
+    'chooseKeyword', 
     [],
     function($interpolateProvider) {
         // Use [[ ]] to delimit AngularJS bindings, because using {{ }} confuses go
@@ -8,7 +8,7 @@ var sourgrapes = angular.module(
     }
 );
 
-sourgrapes.controller('ChooseKeywordCtrl', function($window, $scope) {
+chooseKeyword.controller('ChooseKeywordCtrl', function($window, $scope) {
     
     $scope.keywords = $window.keywords;
     $scope.previous = $window.previous;

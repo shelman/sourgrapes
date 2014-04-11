@@ -1,6 +1,7 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/go-martini/martini"
 	"html/template"
@@ -25,6 +26,8 @@ func Start() {
 	m.Get("/choose/:word", chooseHandler)
 	m.Get("/movie/:title", movieHandler)
 	m.Get("/keyword/:word", keywordHandler)
+	m.Get("/search/movie/", movieSearchHandler)
+	m.Get("/search_results/movie/:search", searchResultsHandler)
 
 	m.Use(martini.Static(filepath.Join(frontEndRoot, "js")))
 	m.Use(martini.Static(filepath.Join(frontEndRoot, "css")))
@@ -168,4 +171,40 @@ func keywordHandler(params martini.Params, res http.ResponseWriter, req *http.Re
 		return
 	}
 	tmpl.Execute(res, keyword)
+}
+
+func movieSearchHandler(res http.ResponseWriter, req *http.Request) {
+	tmpl, err := template.ParseFiles(filepath.Join(frontEndRoot, "movie_search.html"))
+	if err != nil {
+		res.Write([]byte(fmt.Sprintf("error: %v", err)))
+		return
+	}
+	tmpl.Execute(res, nil)
+}
+
+type searchResults struct {
+	Results []string `json:"results"`
+}
+
+func searchResultsHandler(params martini.Params, res http.ResponseWriter, req *http.Request) {
+	searchVal := params["search"]
+
+	moviesWithPrefix, err := model.FindMoviesWithPrefix(searchVal)
+	if err != nil {
+		res.Write([]byte(fmt.Sprintf("error: %v", err)))
+		return
+	}
+
+	results := &searchResults{}
+	for _, movie := range moviesWithPrefix {
+		results.Results = append(results.Results, movie.Title)
+	}
+
+	marshalled, err := json.Marshal(results)
+	if err != nil {
+		res.Write([]byte(fmt.Sprintf("error: %v", err)))
+		return
+	}
+
+	res.Write(marshalled)
 }
