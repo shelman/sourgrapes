@@ -97,7 +97,12 @@ func keywordHandler(params martini.Params, res http.ResponseWriter, req *http.Re
 
 	// we narrowed it down!
 	if len(moviesMatching) == 1 {
-		res.Write([]byte(fmt.Sprintf("looks like you're watching %v", moviesMatching[0].Title)))
+		tmpl, err := template.ParseFiles(filepath.Join(frontEndRoot, "final_choice.html"))
+		if err != nil {
+			res.Write([]byte(fmt.Sprintf("error: %v", err)))
+			return
+		}
+		tmpl.Execute(res, moviesMatching[0])
 		return
 	}
 
